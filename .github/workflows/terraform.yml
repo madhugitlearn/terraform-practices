@@ -1,7 +1,6 @@
 name: Deploy EC2 with Terraform
 
 on:
-  
   workflow_dispatch:
     inputs:
       terraform_action:
