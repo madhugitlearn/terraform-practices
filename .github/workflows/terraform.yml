@@ -1,14 +1,17 @@
 name: Deploy EC2 with Terraform
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  
   workflow_dispatch:
-
+    inputs:
+      terraform_action:
+        description: 'Terraform Action'
+        required: true
+        type: choice
+        options:
+          - apply
+          - destroy
+         
 env:
   AWS_REGION: us-east-1  # Change this to your AWS region
 
@@ -40,7 +43,13 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: |
+          terraform plan -out=tfplan 
 
       - name: Terraform Apply
+        if: inputs.terraform_action == 'apply'
         run: terraform apply -auto-approve tfplan
+
+      - name: Terraform Destroy
+        if: inputs.terraform_action == 'destroy'
+        run: terraform destroy -auto-approve tfplan
