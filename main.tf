@@ -13,6 +13,14 @@ provider "aws" {
   #profile = "developer" # AWS Credentials Profile configured on your local desktop terminal  $HOME/.aws/credentials
   region  = "us-east-1"
 }
+#Backend Block
+terraform {
+  backend "s3" {
+    bucket         = "madhutfstate"
+    key            = "ec2-instance/terraform.tfstate"
+    region         = "us-east-1"
+  }
+}
 
 # Resource Block
 resource "aws_instance" "ec2demo" {
