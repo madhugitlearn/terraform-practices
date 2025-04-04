@@ -17,7 +17,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket         = "madhutfstate"
-    key            = "ec2-instance/terraform.tfstate"
+    key            = "terraform.tfstate"
     region         = "us-east-1"
   }
 }
