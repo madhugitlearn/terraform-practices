@@ -37,25 +37,51 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Initialize Terraform
-        run: terraform init
+      # - name: Initialize Terraform
+      #   run: terraform init \
+      #         -backend-config="key=terraform.tfstate" \
+      #         -backend-config="bucket=madhutfstate" \
+      #         -backend-config="region=us-east-1"
+        
 
-      - name: Validate Terraform
-        run: terraform validate
+      # - name: Validate Terraform
+      #   run: terraform validate
 
       - name: Terraform Plan
         if: inputs.terraform_action == 'plan'
         run: |
+          terraform init \
+              -backend-config="key=terraform.tfstate" \
+              -backend-config="bucket=madhutfstate" \
+              -backend-config="region=us-east-1"
+
+          terraform validate
+
           terraform plan -out=tfplan 
 
       - name: Terraform Plan Destroy
         if: inputs.terraform_action == 'plan-destroy'
         run: |
+          terraform init \
+              -backend-config="key=terraform.tfstate" \
+              -backend-config="bucket=madhutfstate" \
+              -backend-config="region=us-east-1"
+
+          terraform validate
+        
           terraform plan -destroy -out=tfplan
 
       - name: Terraform Apply
         if: inputs.terraform_action == 'apply'
-        run: terraform apply -auto-approve tfplan
+        run: 
+          terraform init \
+              -backend-config="key=terraform.tfstate" \
+              -backend-config="bucket=madhutfstate" \
+              -backend-config="region=us-east-1"
+
+          terraform validate
+        
+          terraform apply -auto-approve tfplan
 
 
       
