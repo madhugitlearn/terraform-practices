@@ -1,1 +1,2 @@
-# terraform-practices
+# terraform-script
+terraform-script
